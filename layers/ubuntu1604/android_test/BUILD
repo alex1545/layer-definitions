@@ -49,6 +49,8 @@ download_pkgs(
     ],
 )
 
+# Required as the base image for android-test-ltl in order to be able to
+# install foreign architecture (i386) debian packages.
 toolchain_container(
     name = "ubuntu1604_i386",
     base = "@ubuntu1604//image",
