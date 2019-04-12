@@ -49,17 +49,17 @@ download_pkgs(
     ],
 )
 
-language_tool_layer(
-    name = "android-test-ltl",
-    base = ":ubuntu1604_i386.tar",
-    installables_tar = "@ubuntu1604_android_test_debs//file",
-)
-
 toolchain_container(
     name = "ubuntu1604_i386",
     base = "@ubuntu1604//image",
     directory = "/var/lib/dpkg",
     files = ["//layers/ubuntu1604/android_test:arch"],
+)
+
+language_tool_layer(
+    name = "android-test-ltl",
+    base = ":ubuntu1604_i386.tar",
+    installables_tar = "@ubuntu1604_android_test_debs//file",
 )
 
 container_test(
