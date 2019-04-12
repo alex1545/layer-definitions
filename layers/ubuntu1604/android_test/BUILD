@@ -13,6 +13,13 @@
 # limitations under the License.
 
 load("@base_images_docker//package_managers:download_pkgs.bzl", "download_pkgs")
+load("@bazel_skylib//:bzl_library.bzl", "bzl_library")
+load(
+    "@bazel_toolchains//rules/container:docker_toolchains.bzl",
+    "language_tool_layer",
+    "toolchain_container",
+)
+load("@io_bazel_rules_docker//contrib:test.bzl", "container_test")
 
 licenses(["notice"])  # Apache 2.0
 
@@ -40,4 +47,26 @@ download_pkgs(
         "xvfb",
         "zlib1g:i386",
     ],
+)
+
+language_tool_layer(
+    name = "android-test-ltl",
+    base = ":ubuntu1604_i386.tar",
+    installables_tar = "@ubuntu1604_android_test_debs//file",
+)
+
+toolchain_container(
+    name = "ubuntu1604_i386",
+    base = "@ubuntu1604//image",
+    directory = "/var/lib/dpkg",
+    files = ["//layers/ubuntu1604/android_test:arch"],
+)
+
+container_test(
+    name = "test",
+    configs = [
+        ":tests.yaml",
+    ],
+    image = ":android-test-ltl",
+    verbose = True,
 )
